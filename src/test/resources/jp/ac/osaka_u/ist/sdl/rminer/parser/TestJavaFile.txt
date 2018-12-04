@@ -1,0 +1,9 @@
+package test.test;
+
+import java.util.List;
+
+public class A<T>{
+	public List<A<T>> getGeneratedList(int value){
+		return null;
+	}
+}
