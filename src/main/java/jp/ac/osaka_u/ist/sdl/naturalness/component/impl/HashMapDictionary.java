@@ -94,4 +94,9 @@ public class HashMapDictionary implements Dictionary {
 	public boolean isGeneratingId() {
 		return generatingId;
 	}
+
+	@Override
+	public int getSize() {
+		return invertedIndex.size();
+	}
 }

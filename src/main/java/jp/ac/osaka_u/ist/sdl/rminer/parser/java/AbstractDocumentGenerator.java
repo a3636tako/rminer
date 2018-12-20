@@ -33,7 +33,7 @@ public class AbstractDocumentGenerator extends TokenizeVistor {
 
 	private Document.Builder documentBuilder;
 	private List<Document> documents;
-	private ASTParser parser = ASTParser.newParser(AST.JLS10);
+	private ASTParser parser = ASTParser.newParser(AST.JLS8);
 	private Iterator<Token> tokenIterator;
 	private Token current;
 	private SourceCode origin;

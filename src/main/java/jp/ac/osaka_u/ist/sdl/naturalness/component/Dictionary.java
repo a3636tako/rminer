@@ -41,4 +41,6 @@ public interface Dictionary {
 	 * @param path データのパス
 	 */
 	void store(Path path);
+	
+	int getSize();
 }
