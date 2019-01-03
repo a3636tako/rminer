@@ -6,8 +6,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -70,8 +74,18 @@ public class Document implements Iterable<Token> {
 		return tokens.iterator();
 	}
 
+	public Iterator<Token> reverseIterator() {
+		return new ReverseIterator<>(tokens.listIterator(tokens.size()));
+	}
+
 	public Stream<Token> stream() {
 		return tokens.stream();
+	}
+
+	public Stream<Token> reverseStream() {
+		Spliterator<Token> spliterator = Spliterators
+			.spliterator(reverseIterator(), tokens.size(), Spliterator.ORDERED | Spliterator.SIZED);
+		return StreamSupport.stream(spliterator, false);
 	}
 
 	public Map<String, String> getProperties() {
@@ -94,5 +108,23 @@ public class Document implements Iterable<Token> {
 	@Override
 	public String toString() {
 		return "Document [tokens=" + tokens + ", properties=" + properties + "]";
+	}
+
+	public static class ReverseIterator<T> implements Iterator<T> {
+		ListIterator<T> iterator;
+
+		public ReverseIterator(ListIterator<T> iterator) {
+			this.iterator = iterator;
+		}
+
+		@Override
+		public boolean hasNext() {
+			return iterator.hasPrevious();
+		}
+
+		@Override
+		public T next() {
+			return iterator.previous();
+		}
 	}
 }
