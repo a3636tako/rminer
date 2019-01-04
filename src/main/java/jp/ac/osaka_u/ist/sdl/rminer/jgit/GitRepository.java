@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectReader;
@@ -23,7 +24,7 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 public class GitRepository {
 	private Path path;
 	private Repository repository;
-	private ObjectReader reader;
+	private ConcurrentHashMap<Long, ObjectReader> readerMap;
 
 	/**
 	 * リポジトリを開く
@@ -34,7 +35,7 @@ public class GitRepository {
 		this.path = path;
 		this.repository = new FileRepositoryBuilder().setGitDir(new File(this.path + "/.git"))
 			.build();
-		this.reader = this.repository.newObjectReader();
+		this.readerMap = new ConcurrentHashMap<>();
 	}
 
 	/**
@@ -43,7 +44,8 @@ public class GitRepository {
 	GitRepository(Path path, Repository repository, ObjectReader reader) {
 		this.path = path;
 		this.repository = repository;
-		this.reader = reader;
+		this.readerMap = new ConcurrentHashMap<>();
+		this.readerMap.put(Thread.currentThread().getId(), reader);
 	}
 
 	/**
@@ -136,7 +138,8 @@ public class GitRepository {
 	}
 
 	public ObjectReader getObjectReader() {
-		return reader;
+		return readerMap.computeIfAbsent(Thread.currentThread()
+			.getId(), id -> this.repository.newObjectReader());
 	}
 
 }

@@ -69,7 +69,7 @@ public class TokenizedProject implements Iterable<TokenizedCode> {
 	}
 
 	public void query(LanguageModel model, Dictionary dict, String resultKey) {
-		query(model, dict, "score", false);
+		query(model, dict, resultKey, false);
 	}
 
 	/**
