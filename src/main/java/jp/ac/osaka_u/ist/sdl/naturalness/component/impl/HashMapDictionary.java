@@ -96,9 +96,10 @@ public class HashMapDictionary implements Dictionary {
 		HashMapDictionary dictionary = new HashMapDictionary();
 		dictionary.generatingId = true;
 
-		//<unk>は除くので1から
-		Streams.zip(IntStream.range(1, count.size())
+		Streams.zip(IntStream.range(0, count.size())
 			.boxed(), count.stream(), (idx, count) -> new int[]{idx, count})
+			//<unk>は除くので最初は飛ばす
+			.skip(1)
 			.sorted(Comparator.<int[]>comparingInt(v -> v[1])
 				.reversed())
 			.forEach(v -> {
