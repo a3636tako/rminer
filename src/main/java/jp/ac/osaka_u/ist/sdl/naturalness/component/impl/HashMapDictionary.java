@@ -3,11 +3,14 @@ package jp.ac.osaka_u.ist.sdl.naturalness.component.impl;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Streams;
 
 import jp.ac.osaka_u.ist.sdl.naturalness.NaturalnessException;
 import jp.ac.osaka_u.ist.sdl.naturalness.component.Dictionary;
@@ -80,6 +83,28 @@ public class HashMapDictionary implements Dictionary {
 				dictionary.count.set((int)id, count.get(i));
 			}
 		}
+
+		dictionary.generatingId = generatingId;
+		return dictionary;
+	}
+
+	/**
+	 * 出現頻度が高い順にソートし、IDを振り直す
+	 * @return
+	 */
+	public HashMapDictionary sort() {
+		HashMapDictionary dictionary = new HashMapDictionary();
+		dictionary.generatingId = true;
+
+		Streams.zip(IntStream.range(0, count.size())
+			.boxed(), count.stream(), (idx, count) -> new int[]{idx, count})
+			.sorted(Comparator.<int[]>comparingInt(v -> v[1])
+				.reversed())
+			.forEach(v -> {
+				String key = invertedIndex.get(v[0]);
+				long id = dictionary.getId(key);
+				dictionary.count.set((int)id, v[1]);
+			});
 
 		dictionary.generatingId = generatingId;
 		return dictionary;

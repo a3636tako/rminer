@@ -23,6 +23,9 @@ dependencies {
 	// https://mvnrepository.com/artifact/args4j/args4j
 	compile group: 'args4j', name: 'args4j', version: '2.33'
 
+	// https://mvnrepository.com/artifact/com.google.guava/guava
+	compile group: 'com.google.guava', name: 'guava', version: '27.0.1-jre'
+
 	// https://mvnrepository.com/artifact/junit/junit
 	testCompile group: 'junit', name: 'junit', version: '4.12'
 
