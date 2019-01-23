@@ -11,6 +11,8 @@ import org.eclipse.jdt.core.compiler.InvalidInputException;
 import org.eclipse.jdt.internal.compiler.classfmt.ClassFileConstants;
 import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
 import org.eclipse.jdt.internal.core.util.PublicScanner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import jp.ac.osaka_u.ist.sdl.rminer.parser.Document;
 import jp.ac.osaka_u.ist.sdl.rminer.parser.SourceCode;
@@ -22,6 +24,7 @@ import jp.ac.osaka_u.ist.sdl.rminer.parser.Tokenizer;
  * Javaソースコードをトークン化
  */
 public class JavaParser implements Tokenizer {
+	private static Logger log = LoggerFactory.getLogger(JavaParser.class);
 
 	public final static String LEXER_TOKEN_TYPE_KEY = "lexerTokenType";
 	public final static String LINE_NUMBER_START = "lineNumberStart";
@@ -57,6 +60,14 @@ public class JavaParser implements Tokenizer {
 		this.contextSensitiveSymbols = Boolean
 			.parseBoolean(parameters.getOrDefault("contextSensitiveSymbols", "false"));
 		this.javaVersion = parameters.getOrDefault("javaVersion", "");
+		
+		log.info("unit:" + this.unit);
+		log.info("javaVersion:" + this.javaVersion);
+		log.info("splitIdentifier:" + this.splitIdentifier);
+		log.info("normalizeIdentifier:" + this.normalizeIdentifier);
+		log.info("tokenizeLinefeed:" + this.tokenizeLinefeed);
+		log.info("identifyTokenType:" + this.identifyTokenType);
+		log.info("contextSensitiveSymbols:" + this.contextSensitiveSymbols);
 	}
 
 	@Override
