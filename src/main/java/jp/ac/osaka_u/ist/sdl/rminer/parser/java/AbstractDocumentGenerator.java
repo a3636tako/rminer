@@ -183,6 +183,8 @@ public class AbstractDocumentGenerator extends TokenizeVistor {
 			int idx = token.getStartPosition();
 			for(String split : iterable(IDENTIFIER_SPLIT_PATTERN.splitAsStream(token.getSurface())
 				.map(String::toLowerCase))) {
+				if(split.length() == 0) continue;
+				
 				Token ntoken = new Token(generateTokenSurface(statement, split, type), idx, idx + split.length(), token
 					.getProperties());
 				super.consumedToken(statement, ntoken, type);
